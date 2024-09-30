@@ -1,0 +1,28 @@
+version: '3.3'
+
+services:
+  backend:
+    build: ./Techdome-backend
+    ports:
+      - "5001:8000"  # Assuming FastAPI runs on port 8000
+    environment:
+      DATABASE_URL: mongodb://mongo:27017/mydatabase
+    depends_on:
+      - mongo
+
+  frontend:
+    build: ./Techdome-frontend
+    ports:
+      - "3000:3000"  # Exposing port 3000 for the frontend
+    depends_on:
+      - backend
+
+  mongo:
+    image: mongo:5.0
+    ports:
+      - "27017:27017"  # Exposing port 27017 for MongoDB
+    volumes:
+      - mongo_data:/data/db  # Persisting MongoDB data
+
+volumes:
+  mongo_data:
